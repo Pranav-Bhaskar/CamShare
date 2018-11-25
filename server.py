@@ -7,6 +7,7 @@ import pickle
 PASSWORD = '123'
 IP = socket.gethostname()
 PORT = 8888
+NUM = 69	#Maximum number of paralel connection's
 
 '''
 	1 -> Authenticate
@@ -62,16 +63,21 @@ class connection_serverside():
 		print('Connection closed with ' + self.ip)
 		c.close()
 
-s = socket.socket()
+if __name__ == "__main__":
+	s = socket.socket()
 
-s.bind((IP, PORT))
+	s.bind((IP, PORT))
 
-s.listen(2)
+	s.listen(NUM)
 
-camera = cv2.VideoCapture(0)
+	camera = cv2.VideoCapture(0)
 
-while True:
-	c, md = s.accept()
-	cont = connection_serverside(c, md)
-	if cont.auth():
-		_thread.start_new_thread(cont.sender, ())
+	while True:
+		try:
+			c, md = s.accept()
+			cont = connection_serverside(c, md)
+			if cont.auth():
+				_thread.start_new_thread(cont.sender, ())
+		except KeyboardInterrupt:
+			print('\nStopping server.\nExitting')
+			break

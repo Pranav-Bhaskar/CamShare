@@ -53,22 +53,23 @@ class connection_clientside():
 			self.link.sendall('17'.encode('utf-8'))
 			self.link.close()
 
-s = socket.socket()
+if __name__ == "__main__":
+	s = socket.socket()
 
-s.connect((IP, PORT))
+	s.connect((IP, PORT))
 
-con = connection_clientside(s)
+	con = connection_clientside(s)
 
-data = s.recv(1024)
-con.auth()
-data = s.recv(1024)
-print(data.decode())
-if data.decode('utf-8') is '2':
-	exit()
-con.setter()
-while True:
-	try:
-		con.get()
-	except:
-		break
-con.dis()
+	data = s.recv(1024)
+	con.auth()
+	data = s.recv(1024)
+	print(data.decode())
+	if data.decode('utf-8') is '2':
+		exit()
+	con.setter()
+	while True:
+		try:
+			con.get()
+		except:
+			break
+	con.dis()
